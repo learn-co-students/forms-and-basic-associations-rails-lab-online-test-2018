@@ -4,11 +4,12 @@ class Song < ActiveRecord::Base
   has_many :notes
 
   def artist_name=(name)
-    self.artist.name = name
+    artist = Artist.find_or_create_by(name: name)
+    self.artist = artist
   end
 
   def artist_name
-    self.artist.name
+    self.artist ? self.artist.name : nil
   end
 
 
