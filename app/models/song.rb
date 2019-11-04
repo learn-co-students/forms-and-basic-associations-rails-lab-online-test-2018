@@ -6,8 +6,10 @@ class Song < ActiveRecord::Base
   # accepts_nested_attributes_for :notes
 
   def notes_attributes=(note_attr)
-    note_attr.values.compact.each do |attr|
-      self.notes.build(attr)
+    note_attr.delete_if{|k,v| v["content"]==""}.values.each do |attr|
+      if !Note.find_by(content: attr["content"], song_id: self.id)
+        self.notes.build(attr)
+      end
     end
   end
 
